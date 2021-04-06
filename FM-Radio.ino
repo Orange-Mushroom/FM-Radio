@@ -10,9 +10,27 @@
 #include "ar1010lib.h"
 
 AR1010 radio = AR1010();
-void setup() {
+void setup() 
+{
   // put your setup code here, to run once:
 
+}
+
+void volumeUP()
+{
+  
+}
+void volumeDown()
+{
+  
+}
+void frequencyUP()
+{
+  
+}
+void frequencyDown()
+{
+  
 }
 
 void loop() {
