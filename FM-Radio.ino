@@ -9,7 +9,7 @@
  */
 #include "ar1010lib.h"
 
-AR1010 radio = AR1010();
+AR1010 radio = AR1010(); // instance of ar1010
 void setup() 
 {
   // put your setup code here, to run once:
