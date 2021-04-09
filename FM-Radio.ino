@@ -11,7 +11,7 @@
 #include <Wire.h> //i2c protocol communicate wit radio module
 #include <LiquidCrystal_I2C.h>
 
-const int buttonPin = 3;
+const int buttonFreqUP = 3; //pin
 
 AR1010 radio = AR1010(); // instance of ar1010
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address to 0x27 for a 16 chars and 2 line display
@@ -20,8 +20,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address to 0x27 for a 16 char
 {
   // Enable I2C on the Arduino, including pull-up resistors.
   Wire.begin();
-  // Initialize the serial port at a speed of 9600 baud
-  Serial.begin(9600); //begins
+  Serial.begin(9600); // Initialize the serial port at a speed of 9600 baud
   Serial.println("Toms radio"); 
   radio.initialise();//Initialise the AR1010 instance of radio to get the class items
   delay(1000); //1sec delay
@@ -64,16 +63,28 @@ void setup()
  
   Wire.begin();
   Serial.begin(9600);
-  Serial.println("AR1010 - 2017 Demo");
+  Serial.println("Toms radio");
   radio.initialise();
   radio.setVolume(VolumeFM);
   radio.setFrequency(frequencyFM);
+  
+  delay(1000);
+  pinMode(buttonFreqUP, INPUT); //sets digital pin 3 as input
+  Serial.println(radio.frequency());   
 }
 
-void loop() {
- Serial.print("Playing: ");
+void loop() {  
+  if(digitalRead(buttonFreqUP)==LOW) //if digital pin on, current run through
+  {
+    radio.seek(u);
+    delay(500); 
+    Serial.println(radio.frequency());  
+  }
+   //Serial.println(digitalRead(buttonFreqUP));  
+   delay(300);
+ /*Serial.print("Playing: ");
  Serial.println(radio.frequency());
- delay(60*1000);
+ delay(60*1000); */
 } 
 
 
