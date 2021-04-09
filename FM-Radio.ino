@@ -45,7 +45,7 @@ void loop() {
 
 } */
 
-double frequencyFM = 1009;//910 100.9
+double frequencyFM = 1058;//910 100.9
 int VolumeFM = 2;
 
 void setup()
@@ -78,21 +78,15 @@ void setup()
 void loop() {  
   if(digitalRead(buttonFreqUP)==LOW) //if digital pin on, current run through
   {
-    radio.seek('u'); // seek next station
-    delay(500); 
-    Serial.println("button pressed freq up");  
-    Serial.println(radio.frequency());  
+     frequencyUP();
   }
    //Serial.println(digitalRead(buttonFreqUP));  
  /*Serial.print("Playing: ");
  Serial.println(radio.frequency());
  delay(60*1000); */
    if(digitalRead(buttonFreqDown)==LOW) //if digital pin on, current run through
-  {
-    radio.seek('d'); //seek down
-    delay(500); 
-    Serial.println("button pressed freq down"); 
-    Serial.println(radio.frequency());  
+    {
+      frequencyDown();
   }
    //Serial.println(digitalRead(buttonFreqUP));  
    delay(300); 
@@ -110,9 +104,17 @@ void volumeDown()
 }
 void frequencyUP()
 {
+     radio.seek('u'); // seek next station
+    delay(500); 
+    Serial.println("button pressed freq up");  
+    Serial.println(radio.frequency()); 
   
 }
 void frequencyDown()
 {
+    radio.seek('d'); //seek down
+    delay(500); 
+    Serial.println("button pressed freq down"); 
+    Serial.println(radio.frequency());  
   
 }
