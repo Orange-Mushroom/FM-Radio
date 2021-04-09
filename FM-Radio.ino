@@ -19,33 +19,6 @@ const int buttonVolDown = 5; //pin
 AR1010 radio = AR1010(); // instance of ar1010
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address to 0x27 for a 16 chars and 2 line display
 
-/*void setup()
-  {
-  // Enable I2C on the Arduino, including pull-up resistors.
-  Wire.begin();
-  Serial.begin(9600); // Initialize the serial port at a speed of 9600 baud
-  Serial.println("Toms radio");
-  radio.initialise();//Initialise the AR1010 instance of radio to get the class items
-  delay(1000); //1sec delay
-  radio.setFrequency(910); // set it to 91.0MHz
-  radio.setVolume(2);
-  delay(1000);
-  pinMode(buttonPin, INPUT); //sets digital pin 3 as input
-  Serial.println(radio.frequency());
-
-  }
-  void loop() {
-  // put your main code here, to run repeatedly:
-  if(digitalRead(buttonPin)==LOW) //if digital pin on, current run through
-  {
-    radio.seek();
-    delay(500);
-    Serial.println(radio.frequency());
-  }
-   Serial.println(digitalRead(buttonPin));
-   delay(1000);
-
-  } */
 
 double frequencyFM = 1058;//910 100.9
 int VolumeFM = 2;
@@ -66,14 +39,16 @@ void setup()
 
   Wire.begin();
   Serial.begin(9600);
-  Serial.println("Toms radio");
+  Serial.println("FM Radio");
   radio.initialise();
-  radio.setVolume(VolumeFM);
+  radio.setVolume(VolumeFM); // set intial vol which is2
   radio.setFrequency(frequencyFM);
 
   delay(1000);
   pinMode(buttonFreqUP, INPUT); //sets digital pin 3 as input
   pinMode(buttonFreqDown, INPUT);
+  pinMode(buttonVolUp, INPUT);
+  pinMode(buttonVolDown, INPUT);
   Serial.println(radio.frequency());
 }
 
@@ -83,17 +58,13 @@ void loop() {
     frequencyUP();
     lcdUpdate();
   }
-  //Serial.println(digitalRead(buttonFreqUP));
-  /*Serial.print("Playing: ");
-    Serial.println(radio.frequency());
-    delay(60*1000); */
+
+
   if (digitalRead(buttonFreqDown) == LOW) //if digital pin on, current run through
   {
     frequencyDown();
     lcdUpdate();
   }
-  //Serial.println(digitalRead(buttonFreqUP));
-
 
   if (digitalRead(buttonVolUp) == LOW) //if digital pin on, current run through
   {
@@ -114,11 +85,11 @@ void lcdUpdate()
 {
   lcd.clear();
 
-  lcd.setCursor(0, 0);
+  lcd.setCursor(0, 0); // first row
   lcd.print("Frequency:");
-  lcd.print(frequencyFM);
+  lcd.print(frequencyFM); // set to new freq if changed below
 
-  lcd.setCursor(0, 1);
+  lcd.setCursor(0, 1); // 2nd row
   lcd.print("Volume:");
   lcd.print(VolumeFM);
 }
@@ -126,12 +97,12 @@ void lcdUpdate()
 
 void volumeUP() // get more pull up
 {
-  if (VolumeFM < 15)
+  if (VolumeFM < 15) //if less than greatest
   {
-    delay(500);
-    VolumeFM ++;
-    radio.setVolume(VolumeFM);
-    Serial.println("button pressed vol up");
+    delay(500); // delay for button press
+    VolumeFM ++; // increment volume by 1
+    radio.setVolume(VolumeFM); // set vol by the increment
+    Serial.println("button pressed vol up"); // check on serial monitor if pressed
   }
 }
 void volumeDown()
@@ -148,10 +119,10 @@ void volumeDown()
 void frequencyUP()
 {
   radio.seek('u'); // seek next station
-  delay(500);
-  Serial.println("button pressed freq up");
+  delay(500); // delay for button press
+  Serial.println("button pressed freq up"); // check on serial monitor if pressed
   Serial.println(radio.frequency());
-  frequencyFM = radio.frequency();
+  frequencyFM = radio.frequency(); // sets global variable to this, so it can be used to change on LCD
 
 }
 void frequencyDown()
