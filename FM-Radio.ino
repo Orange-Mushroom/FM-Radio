@@ -79,6 +79,7 @@ void loop() {
   if(digitalRead(buttonFreqUP)==LOW) //if digital pin on, current run through
   {
      frequencyUP();
+     lcdUpdate();
   }
    //Serial.println(digitalRead(buttonFreqUP));  
  /*Serial.print("Playing: ");
@@ -87,11 +88,24 @@ void loop() {
    if(digitalRead(buttonFreqDown)==LOW) //if digital pin on, current run through
     {
       frequencyDown();
+      lcdUpdate();
   }
    //Serial.println(digitalRead(buttonFreqUP));  
    delay(300); 
 } 
 
+void lcdUpdate()
+{
+  lcd.clear();
+  
+  lcd.setCursor(0,0);
+  lcd.print("Frequency:");
+  lcd.print(frequencyFM);
+
+  lcd.setCursor(0,1);
+  lcd.print("Volume:");
+  lcd.print(VolumeFM);
+}
 
 
 void volumeUP()
@@ -108,6 +122,7 @@ void frequencyUP()
     delay(500); 
     Serial.println("button pressed freq up");  
     Serial.println(radio.frequency()); 
+    frequencyFM = radio.frequency();
   
 }
 void frequencyDown()
@@ -116,5 +131,6 @@ void frequencyDown()
     delay(500); 
     Serial.println("button pressed freq down"); 
     Serial.println(radio.frequency());  
+    frequencyFM = radio.frequency();
   
 }
