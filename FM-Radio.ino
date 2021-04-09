@@ -12,6 +12,7 @@
 #include <LiquidCrystal_I2C.h>
 
 const int buttonFreqUP = 3; //pin
+const int buttonFreqDown = 2; //pin
 
 AR1010 radio = AR1010(); // instance of ar1010
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address to 0x27 for a 16 chars and 2 line display
@@ -45,7 +46,7 @@ void loop() {
 } */
 
 double frequencyFM = 1009;//910 100.9
-int VolumeFM = 5;
+int VolumeFM = 2;
 
 void setup()
 {
@@ -70,21 +71,31 @@ void setup()
   
   delay(1000);
   pinMode(buttonFreqUP, INPUT); //sets digital pin 3 as input
+  pinMode(buttonFreqDown, INPUT);
   Serial.println(radio.frequency());   
 }
 
 void loop() {  
   if(digitalRead(buttonFreqUP)==LOW) //if digital pin on, current run through
   {
-    radio.seek(u);
+    radio.seek('u'); // seek next station
     delay(500); 
+    Serial.println("button pressed freq up");  
     Serial.println(radio.frequency());  
   }
    //Serial.println(digitalRead(buttonFreqUP));  
-   delay(300);
  /*Serial.print("Playing: ");
  Serial.println(radio.frequency());
  delay(60*1000); */
+   if(digitalRead(buttonFreqDown)==LOW) //if digital pin on, current run through
+  {
+    radio.seek('d'); //seek down
+    delay(500); 
+    Serial.println("button pressed freq down"); 
+    Serial.println(radio.frequency());  
+  }
+   //Serial.println(digitalRead(buttonFreqUP));  
+   delay(300); 
 } 
 
 
