@@ -126,16 +126,23 @@ void lcdUpdate()
 
 void volumeUP() // get more pull up
 {
-  if(VolumeFM<=15)
+  if (VolumeFM < 15)
   {
- radio.setVolume(VolumeFM++);
+    delay(500);
+    VolumeFM ++;
+    radio.setVolume(VolumeFM);
+    Serial.println("button pressed vol up");
   }
 }
 void volumeDown()
 {
-  if(VolumeFM>=0)
+  if (VolumeFM > 0)
   {
-  radio.setVolume(VolumeFM--);
+    delay(500);
+    VolumeFM --;
+    radio.setVolume(VolumeFM);
+    Serial.println("button pressed down up");
+
   }
 }
 void frequencyUP()
