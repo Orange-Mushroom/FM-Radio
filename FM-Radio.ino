@@ -9,9 +9,13 @@
  */
 #include "ar1010lib.h"
 #include <Wire.h> //i2c protocol communicate wit radio module
+#include <LiquidCrystal_I2C.h>
+
 const int buttonPin = 3;
 
 AR1010 radio = AR1010(); // instance of ar1010
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address to 0x27 for a 16 chars and 2 line display
+
 /*void setup() 
 {
   // Enable I2C on the Arduino, including pull-up resistors.
@@ -42,13 +46,28 @@ void loop() {
 } */
 
 double frequencyFM = 1009;//910 100.9
-void setup() {
- Wire.begin();
- Serial.begin(9600);
- Serial.println("AR1010 - 2017 Demo");
- radio.initialise();
- radio.setVolume(5);
- radio.setFrequency(frequencyFM);
+int VolumeFM = 5;
+
+void setup()
+{
+  lcd.begin(); // initialize the LCD
+  lcd.backlight();
+  
+  lcd.setCursor(0,0);
+  lcd.print("Frequency:");
+  lcd.print(frequencyFM);
+
+  lcd.setCursor(0,1);
+  lcd.print("Volume:");
+  lcd.print(VolumeFM);
+ 
+ 
+  Wire.begin();
+  Serial.begin(9600);
+  Serial.println("AR1010 - 2017 Demo");
+  radio.initialise();
+  radio.setVolume(VolumeFM);
+  radio.setFrequency(frequencyFM);
 }
 
 void loop() {
@@ -56,6 +75,7 @@ void loop() {
  Serial.println(radio.frequency());
  delay(60*1000);
 } 
+
 
 
 void volumeUP()
