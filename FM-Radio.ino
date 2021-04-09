@@ -126,11 +126,17 @@ void lcdUpdate()
 
 void volumeUP() // get more pull up
 {
-
+  if(VolumeFM<=15)
+  {
+ radio.setVolume(VolumeFM++);
+  }
 }
 void volumeDown()
 {
-
+  if(VolumeFM>=0)
+  {
+  radio.setVolume(VolumeFM--);
+  }
 }
 void frequencyUP()
 {
