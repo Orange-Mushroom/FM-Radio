@@ -9,18 +9,18 @@
 */
 #include "ar1010lib.h"
 #include <Wire.h> //i2c protocol communicate wit radio module
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal_I2C.h> // lcd
 
 const int buttonFreqUP = 3; //pin
 const int buttonFreqDown = 2; //pin
 const int buttonVolUp = 6; //pin
 const int buttonVolDown = 5; //pin
-
+//buttons orientation check with multimeter continuity
 AR1010 radio = AR1010(); // instance of ar1010
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address to 0x27 for a 16 chars and 2 line display
 
 
-double frequencyFM = 1058;//910 100.9
+double frequencyFM = 1009;//910 100.9 = classical, eagle radio 96.4
 int VolumeFM = 2;
 
 void setup()
@@ -29,8 +29,9 @@ void setup()
   lcd.backlight();
 
   lcd.setCursor(0, 0);
-  lcd.print("Frequency:");
-  lcd.print(frequencyFM);
+  lcd.print("Freq:");
+  lcd.print(frequencyFM/10); // /10 to show correct Freq
+  lcd.print("MHz"); //
 
   lcd.setCursor(0, 1);
   lcd.print("Volume:");
@@ -81,13 +82,14 @@ void loop() {
   delay(300); // when pressed, hold button for atleast 300ms
 }
 
-void lcdUpdate()
+void lcdUpdate()//update LCD vol and freq
 {
   lcd.clear();
 
   lcd.setCursor(0, 0); // first row
-  lcd.print("Frequency:");
-  lcd.print(frequencyFM); // set to new freq if changed below
+  lcd.print("Freq:");
+  lcd.print(frequencyFM/10); // set to new freq if changed below, prints /10 cuz 1058 -> 105.8
+  lcd.print("MHz"); 
 
   lcd.setCursor(0, 1); // 2nd row
   lcd.print("Volume:");
@@ -107,18 +109,17 @@ void volumeUP() // get more pull up
 }
 void volumeDown()
 {
-  if (VolumeFM > 0)
+  if (VolumeFM > 0) // if >0 , so dont go negative
   {
     delay(500);
-    VolumeFM --;
+    VolumeFM --; // vol decreased by 1
     radio.setVolume(VolumeFM);
     Serial.println("button pressed down up");
-
   }
 }
 void frequencyUP()
 {
-  radio.seek('u'); // seek next station
+  radio.seek('u'); // seek next station , 'u' shown in library
   delay(500); // delay for button press
   Serial.println("button pressed freq up"); // check on serial monitor if pressed
   Serial.println(radio.frequency());
